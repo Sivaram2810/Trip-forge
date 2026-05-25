@@ -28,7 +28,6 @@ export default function SettingsScreen() {
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-        {/* Appearance */}
         <SettingsSection title="Appearance">
           <SettingsRow
             icon={darkMode ? <Moon size={18} className="text-indigo-500" /> : <Sun size={18} className="text-yellow-500" />}
@@ -38,7 +37,6 @@ export default function SettingsScreen() {
           />
         </SettingsSection>
 
-        {/* Notifications */}
         <SettingsSection title="Notifications">
           <SettingsRow
             icon={<Bell size={18} className="text-orange-500" />}
@@ -60,7 +58,6 @@ export default function SettingsScreen() {
           />
         </SettingsSection>
 
-        {/* Language & Currency */}
         <SettingsSection title="Localisation">
           <div className="p-4">
             <div className="flex items-center gap-3 mb-3">
@@ -89,7 +86,6 @@ export default function SettingsScreen() {
           </div>
         </SettingsSection>
 
-        {/* Privacy & Security */}
         <SettingsSection title="Privacy & Security">
           <SettingsRow
             icon={<Shield size={18} className="text-green-500" />}
@@ -111,12 +107,11 @@ export default function SettingsScreen() {
           />
         </SettingsSection>
 
-        {/* About */}
         <SettingsSection title="About">
           <SettingsRow
             icon={<span className="text-lg">📱</span>}
             label="App Version"
-            sub="v2.4.1 (Build 2401)"
+            sub="v2.5.0 (Build 2501)"
             right={<span className="text-xs text-green-500 font-semibold">Up to date</span>}
           />
           <SettingsRow
@@ -139,7 +134,6 @@ export default function SettingsScreen() {
           />
         </SettingsSection>
 
-        {/* Danger zone */}
         <div className="bg-red-50 dark:bg-red-900/10 rounded-2xl border border-red-100 dark:border-red-800 overflow-hidden">
           <p className="px-4 py-2 text-xs font-bold text-red-500 uppercase tracking-widest border-b border-red-100 dark:border-red-800">Danger Zone</p>
           <button className="w-full flex items-center gap-3 p-4 text-left hover:bg-red-100/50 dark:hover:bg-red-900/20 transition-colors">
@@ -174,7 +168,7 @@ function SettingsRow({ icon, label, sub, right }: { icon: ReactNode; label: stri
         <p className="font-semibold text-gray-900 dark:text-white text-sm">{label}</p>
         <p className="text-xs text-gray-500 dark:text-gray-400">{sub}</p>
       </div>
-      {right}
+      <div className="flex-shrink-0">{right}</div>
     </div>
   );
 }
