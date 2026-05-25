@@ -1,6 +1,7 @@
 export type Screen =
   | 'splash'
   | 'login'
+  | 'onboarding'
   | 'dashboard'
   | 'preferences'
   | 'loading'
@@ -10,7 +11,9 @@ export type Screen =
   | 'profile'
   | 'wishlist'
   | 'support'
-  | 'settings';
+  | 'settings'
+  | 'rewards'
+  | 'trip-detail';
 
 export interface User {
   id: string;
@@ -19,11 +22,24 @@ export interface User {
   avatar: string;
   tier: string;
   joinedDate: string;
-  tripsCompleted: number;
-  countriesVisited: number;
-  totalSpent: number;
   phone: string;
   bio: string;
+  onboardingComplete: boolean;
+  travelPreferences?: OnboardingPreferences;
+}
+
+export interface OnboardingPreferences {
+  tripTypes: string[];
+  interests: string[];
+  budgetRange: string;
+  preferredDestinations: string[];
+}
+
+export interface PassengerDetail {
+  name: string;
+  age: string;
+  gender: string;
+  type: 'adult' | 'child';
 }
 
 export interface TripPreferences {
@@ -35,8 +51,11 @@ export interface TripPreferences {
   tripType: string;
   date: string;
   travellers: number;
+  adults: number;
+  children: number;
   interests: string[];
   priority: 'budget' | 'comfort' | 'experience';
+  passengers?: PassengerDetail[];
 }
 
 export interface TripPlan {
@@ -50,6 +69,7 @@ export interface TripPlan {
   totalCost: number;
   createdAt: string;
   status: 'planning' | 'booked' | 'completed';
+  bookingRef?: string;
 }
 
 export interface BookingDetails {
@@ -70,4 +90,7 @@ export interface WishlistItem {
   destinationId: string;
   destinationName: string;
   addedAt: string;
+  preferredTripType?: string;
+  adults?: number;
+  children?: number;
 }
