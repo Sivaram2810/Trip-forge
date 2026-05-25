@@ -361,7 +361,7 @@ export const TRAVEL_TIPS = [
   { icon: '🔌', tip: 'Get a universal travel adapter. Most countries use different plug types.' },
   { icon: '💳', tip: 'Inform your bank about international travel to avoid card blocks abroad.' },
   { icon: '📄', tip: 'Keep digital copies of all documents: passport, visa, insurance, hotel bookings.' },
-  { icon: '🌐', tip: 'Get a local SIM or international data plan. Staying connected is crucial for navigation.' },
+  { icon: '🌐', tip: 'We will provide you with a local SIM or international data plan. Staying connected is crucial for navigation.' },
   { icon: '💰', tip: 'Always have some local cash for emergencies, tips, and small vendors.' },
   { icon: '🏥', tip: 'Purchase comprehensive travel insurance covering medical, cancellation, and baggage.' },
 ];
