@@ -10,11 +10,15 @@ interface AppContextType {
   setCurrentPrefs: (p: TripPreferences | null) => void;
   currentPlan: TripPlan | null;
   setCurrentPlan: (p: TripPlan | null) => void;
+  selectedTrip: TripPlan | null;
+  setSelectedTrip: (t: TripPlan | null) => void;
   trips: TripPlan[];
   addTrip: (t: TripPlan) => void;
+  updateTripStatus: (id: string, status: TripPlan['status']) => void;
   wishlist: WishlistItem[];
   toggleWishlist: (destId: string, destName: string) => void;
   isWishlisted: (destId: string) => boolean;
+  updateWishlistItem: (id: string, updates: Partial<WishlistItem>) => void;
   darkMode: boolean;
   setDarkMode: (v: boolean) => void;
   notifications: boolean;
@@ -41,6 +45,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [user, setUserState] = useState<User | null>(loadFromStorage('tf_user', null));
   const [currentPrefs, setCurrentPrefs] = useState<TripPreferences | null>(null);
   const [currentPlan, setCurrentPlan] = useState<TripPlan | null>(null);
+  const [selectedTrip, setSelectedTrip] = useState<TripPlan | null>(null);
   const [trips, setTrips] = useState<TripPlan[]>(loadFromStorage('tf_trips', []));
   const [wishlist, setWishlist] = useState<WishlistItem[]>(loadFromStorage('tf_wishlist', []));
   const [darkMode, setDarkModeState] = useState<boolean>(loadFromStorage('tf_dark', false));
@@ -60,18 +65,38 @@ export function AppProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('tf_trips', JSON.stringify(updated));
   };
 
+  const updateTripStatus = (id: string, status: TripPlan['status']) => {
+    const updated = trips.map(t => t.id === id ? { ...t, status } : t);
+    setTrips(updated);
+    localStorage.setItem('tf_trips', JSON.stringify(updated));
+  };
+
   const toggleWishlist = (destId: string, destName: string) => {
     let updated: WishlistItem[];
     if (wishlist.find(w => w.destinationId === destId)) {
       updated = wishlist.filter(w => w.destinationId !== destId);
     } else {
-      updated = [...wishlist, { id: `w_${Date.now()}`, destinationId: destId, destinationName: destName, addedAt: new Date().toISOString() }];
+      updated = [...wishlist, {
+        id: `w_${Date.now()}`,
+        destinationId: destId,
+        destinationName: destName,
+        addedAt: new Date().toISOString(),
+        adults: 2,
+        children: 0,
+        preferredTripType: 'leisure',
+      }];
     }
     setWishlist(updated);
     localStorage.setItem('tf_wishlist', JSON.stringify(updated));
   };
 
   const isWishlisted = (destId: string) => wishlist.some(w => w.destinationId === destId);
+
+  const updateWishlistItem = (id: string, updates: Partial<WishlistItem>) => {
+    const updated = wishlist.map(w => w.id === id ? { ...w, ...updates } : w);
+    setWishlist(updated);
+    localStorage.setItem('tf_wishlist', JSON.stringify(updated));
+  };
 
   const setDarkMode = (v: boolean) => {
     setDarkModeState(v);
@@ -88,7 +113,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('tf_currency', JSON.stringify(v));
   };
 
-  // Apply dark mode to document
   useEffect(() => {
     if (darkMode) document.documentElement.classList.add('dark');
     else document.documentElement.classList.remove('dark');
@@ -96,11 +120,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   return (
     <AppContext.Provider value={{
-      screen, setScreen, user, setUser,
+      screen, setScreen,
+      user, setUser,
       currentPrefs, setCurrentPrefs,
       currentPlan, setCurrentPlan,
-      trips, addTrip,
-      wishlist, toggleWishlist, isWishlisted,
+      selectedTrip, setSelectedTrip,
+      trips, addTrip, updateTripStatus,
+      wishlist, toggleWishlist, isWishlisted, updateWishlistItem,
       darkMode, setDarkMode,
       notifications, setNotifications,
       currency, setCurrency,
