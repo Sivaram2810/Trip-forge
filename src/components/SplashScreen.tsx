@@ -40,34 +40,40 @@ export default function SplashScreen() {
   useEffect(() => {
     if (phase === 'done') {
       setTimeout(() => {
-        setScreen(user ? 'dashboard' : 'login');
+        if (!user) {
+          setScreen('login');
+        } else if (!user.onboardingComplete) {
+          setScreen('onboarding');
+        } else {
+          setScreen('dashboard');
+        }
       }, 500);
     }
   }, [phase, user, setScreen]);
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)' }}>
-      {/* Animated background particles */}
+    <div
+      className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)' }}
+    >
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(20)].map((_, i) => (
           <div
             key={i}
             className="absolute rounded-full opacity-10 animate-pulse"
             style={{
-              width: `${Math.random() * 120 + 20}px`,
-              height: `${Math.random() * 120 + 20}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              width: `${(i * 37 % 100) + 20}px`,
+              height: `${(i * 37 % 100) + 20}px`,
+              left: `${(i * 13) % 100}%`,
+              top: `${(i * 17) % 100}%`,
               background: ['#f97316', '#ec4899', '#8b5cf6', '#06b6d4'][i % 4],
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${Math.random() * 4 + 2}s`,
+              animationDelay: `${(i * 0.3) % 3}s`,
+              animationDuration: `${3 + (i % 3)}s`,
             }}
           />
         ))}
       </div>
 
-      {/* Globe animation */}
       <div className="relative z-10 flex flex-col items-center gap-8">
         <div
           className="relative"
@@ -77,22 +83,18 @@ export default function SplashScreen() {
             transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
           }}
         >
-          {/* Logo glow */}
           <div className="absolute inset-0 rounded-3xl blur-2xl opacity-50"
             style={{ background: 'linear-gradient(135deg, #f97316, #ec4899)' }} />
           <div className="relative w-28 h-28 rounded-3xl flex items-center justify-center text-6xl shadow-2xl"
             style={{ background: 'linear-gradient(135deg, #f97316, #ec4899)' }}>
             🌍
           </div>
-
-          {/* Orbit ring */}
           <div className="absolute inset-0 rounded-3xl border-2 border-orange-400/30"
             style={{ animation: 'spin 4s linear infinite' }} />
           <div className="absolute -inset-3 rounded-3xl border border-pink-400/20"
             style={{ animation: 'spin 6s linear infinite reverse' }} />
         </div>
 
-        {/* Brand name */}
         <div
           style={{
             opacity: phase === 'logo' ? 0 : 1,
@@ -109,7 +111,6 @@ export default function SplashScreen() {
           </p>
         </div>
 
-        {/* Fact card */}
         <div
           className="max-w-sm mx-auto px-8 text-center"
           style={{
@@ -124,7 +125,6 @@ export default function SplashScreen() {
           </div>
         </div>
 
-        {/* Progress bar */}
         <div className="w-64">
           <div className="h-1 bg-white/10 rounded-full overflow-hidden">
             <div
@@ -142,7 +142,6 @@ export default function SplashScreen() {
         </div>
       </div>
 
-      {/* Bottom tagline */}
       <div className="absolute bottom-8 text-center">
         <p className="text-purple-400/40 text-xs tracking-widest uppercase">The World Awaits You ✈️</p>
       </div>
